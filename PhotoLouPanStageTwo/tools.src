@@ -1,0 +1,64 @@
+#-----------------------------------------URL Type---------------------------------------
+http://fulixincheng010.fang.com/
+http://longleyizhen0512.fang.com/shop/
+http://zhongguotanghongjie.fang.com/
+
+#-------------------------------------JS下自动检测---------------------------------------
+function judgeAll(items=undefined){
+    items = [
+        [
+            "XXXXXXXXXXXXXXX",          /* 占位用 */
+        ],
+        [
+            ".pho_main_right  .pho_main_right_synr ul li img"
+        ],
+        [
+            ".main .list_left .list .list_lb dl span a"
+        ]
+    ]
+    function judge(items){
+        ret = true;
+        for(var i=0; i<items.length; i++){
+            select = $(items[i]);
+            if (!select || select.length == 0){
+                ret = false;
+                break;
+            }
+        }
+        return ret;
+    }
+    for(var i=0; i<items.length; i++){
+        ret = judge(items[i])
+        console.log(i+1, ret)
+    }
+}
+
+#-------------------------------------当前目录下所有文件过滤---------------------------------------
+# 过滤3000字节以下文件
+for i in $(ls -d PhotoLouPanStageTwo*)
+do
+    if [ -d "$i" ];then
+        cd $i; echo "----"$i"----"$(ls |wc -l) ; rm -fr $(ll | awk '{if($5 < 3000){print $9}}' ); ls |wc -l; cd ..
+    else
+        echo -e "----\033[31m$i\033[0m----\033[32mnot found\033[0m"
+    fi
+done
+#-------------------------------------进程调试---------------------------------------
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 3 |tail -n 3|awk '{print $2}')
+do
+    taskset -pc 0 $i
+done
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 6 |tail -n 3 |awk '{print $2}')
+do
+    taskset -pc 1 $i
+done
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 9 |tail -n 3 |awk '{print $2}')
+do
+    taskset -pc 2 $i
+done
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 12 |tail -n 3 |awk '{print $2}')
+do
+    taskset -pc 3 $i
+done
+#-------------------------------------杀进程---------------------------------------
+kill $(ps -ef |grep lpmain |grep -v grep |awk '{print $2}')

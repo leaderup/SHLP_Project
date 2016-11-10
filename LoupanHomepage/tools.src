@@ -1,0 +1,95 @@
+#-----------------------------------------URL Type---------------------------------------
+http://fulixincheng010.fang.com/
+http://longleyizhen0512.fang.com/shop/
+http://zhongguotanghongjie.fang.com/
+
+-- http://pingguohui.fang.com/
+#-------------------------------------JS下自动检测---------------------------------------
+function judgeAll(){
+    items = [
+        [
+            "div.br_left ul.tf",
+            "div.sftitle div.lpname div.lpbt h1 a",
+            "div.sftitle div.lpname div.lpbt span",
+            "div.sftitle div.lpname div.lpicon div a.tag_li",
+            "div.firstbox div.firstright div.information div.information_li div.inf_left p",
+            "iframe#iframe_map",
+            "#orginalNaviBox a"
+            ],
+        [
+            "div.wrap div.bread p.floatl",
+            "div.logoBox_sq div.ceninfo_sq h1 a",
+            "div.plptinfo_txt.floatr div.plptinfo_list ul li",
+            "div.con_left div.box iframe",
+            "div#orginalNaviBox ul li a"
+            ],
+        [
+            "div.br_left ul.tf",
+            "div.sftitle div.lpbt h1 a",
+            "div.sftitle div.lpname.fl div.lpicon a.tag_li",
+            "div.firstbox div.firstright div.information div.information_li div.inf_left p",
+            "iframe#iframe_map",
+            "#orginalNaviBox a"
+        ],
+        [
+            "div.br_left ul.tf",
+            "div.sftitle div.lpname div.lpbt h1 a",
+            "div.lpname div.lpbt span.h1_label",
+            "div.lpicon div a.tag_li",
+            "div.firstbox div.firstright div.information div.information_li div.inf_left p",
+            "iframe#iframe_map",
+            "#orginalNaviBox a"
+        ],
+        [
+            "div.breadcrumb div.br_left ul.tf",
+            "div.sftitle div.lpname div.lpbt h1 a.ts_linear",
+            "div.sftitle div.lpname div.lpicon a.tag_li",
+            "div.cd_first_right div.cd_right_nr1_Ub div.cd_fir_xx_a ul li",
+            "iframe#iframe_map",
+            "#orginalNaviBox a"
+        ],
+        [
+        ".lpbl .lpblbox .title .gray6",
+        ".lpbl .lpblbox .title .biaoti",
+        ".lpbl .lpblbox .xiangqing",
+        ".lpbl .lpblbox1 .xiangqing",
+        "#map iframe"
+        ]
+    ]
+
+    function judge(items){
+        ret = true;
+        for(var i=0; i<items.length; i++){
+            select = $(items[i]);
+            if (!select || select.length == 0){
+                ret = false;
+                break;
+            }
+        }
+        return ret;
+    }
+    for(var i=0; i<items.length; i++){
+        ret = judge(items[i])
+        console.log(i+1, ret)
+    }
+}
+
+#-------------------------------------当前目录下所有文件过滤---------------------------------------
+# 过滤3000字节以下文件
+for i in LoupanHomepage LoupanHomepage_1 LoupanHomepage_2 LoupanHomepage_3 LoupanHomepage_4 LoupanHomepage_5 LoupanHomepage_6 LoupanHomepage_7;
+do
+    if [ -d "$i" ];then
+        cd $i; echo "----"$i"----"$(ls |wc -l) ; rm -fr $(ll | awk '{if($5 < 3000){print $9}}' ); ls |wc -l; cd ..
+    else
+        echo -e "----\033[31m$i\033[0m----\033[32mnot found\033[0m"
+    fi
+done
+#-------------------------------------进程调试---------------------------------------
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 3 |awk '{print $2}')
+do
+    taskset -pc 0 $i
+done
+for i in $(ps -ef |grep lpmain |grep -v grep|tail -n 3 |awk '{print $2}')
+do
+    taskset -pc 1 $i
+done

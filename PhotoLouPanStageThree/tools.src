@@ -1,0 +1,61 @@
+#-----------------------------------------URL Type---------------------------------------
+http://fulixincheng010.fang.com/
+http://longleyizhen0512.fang.com/shop/
+http://zhongguotanghongjie.fang.com/
+
+#-------------------------------------JS下自动检测---------------------------------------
+function judgeAll(items=undefined){
+    items = [
+        [
+            "div.mainl div.besic_inform table tbody tr",
+            "#xq_xmpt_anchor",
+            "#xq_jtzk_anchor",
+            "#xq_jczx_anchor",
+            "#xq_lczk_anchor",
+            "#xq_cwxx_anchor",
+            "#xq_xgxx_anchor"
+        ],
+        [
+            "div.maininfo div.leftinfo .yihang",
+            "div.maininfo div.leftinfo .lbox",
+        ]
+    ]
+    function judge(items){
+        ret = true;
+        for(var i=0; i<items.length; i++){
+            select = $(items[i]);
+            if (!select || select.length == 0){
+                ret = false;
+                break;
+            }
+        }
+        return ret;
+    }
+    for(var i=0; i<items.length; i++){
+        ret = judge(items[i])
+        console.log(i+1, ret)
+    }
+}
+
+#-------------------------------------当前目录下所有文件过滤---------------------------------------
+# 过滤3000字节以下文件
+
+#-------------------------------------进程调试---------------------------------------
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 3 |tail -n 3|awk '{print $2}')
+do
+    taskset -pc 0 $i
+done
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 6 |tail -n 3 |awk '{print $2}')
+do
+    taskset -pc 1 $i
+done
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 9 |tail -n 3 |awk '{print $2}')
+do
+    taskset -pc 2 $i
+done
+for i in $(ps -ef |grep lpmain |grep -v grep|head -n 12 |tail -n 3 |awk '{print $2}')
+do
+    taskset -pc 3 $i
+done
+#-------------------------------------杀进程---------------------------------------
+kill $(ps -ef |grep lpmain |grep -v grep |awk '{print $2}')

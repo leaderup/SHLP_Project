@@ -1,0 +1,11 @@
+database:
+loupan
+
+collection:
+lp_details
+lp_details_distinct
+lp_home_unique
+lp_homepage
+lp_photo_details
+lp_photo_links
+mhpage
